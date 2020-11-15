@@ -1,0 +1,6 @@
+Line: 1 ORGANIZATION Sabancı Üniversitesi
+Line: 1 TIME 1999
+Line: 1 PERSON Tosun Terzioğlu
+Line: 1 LOCATION İstanbul
+Line: 1 LOCATION Tuzla
+Line: 2 PERSON Yusuf Leblebici

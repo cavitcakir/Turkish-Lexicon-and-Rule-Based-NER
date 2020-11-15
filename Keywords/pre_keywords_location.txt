@@ -1,0 +1,10 @@
+kuzey
+Kuzey
+güney
+Güney
+doğu
+Doğu
+batı
+Batı
+başkent
+Başkent
