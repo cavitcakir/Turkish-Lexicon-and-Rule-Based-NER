@@ -1,4 +1,4 @@
-# Title: Lexicon and Rule-based Named Entity Recognition
+# Lexicon and Rule-based Named Entity Recognition
 
 
 #### Structure of file:
