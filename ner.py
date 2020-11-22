@@ -129,12 +129,6 @@ def ensamble_matches(tagged):
                         del tagged[j]
                         found_one = True
                         break
-                    # elif (Type== "ORGANIZATION\t") and (iStart == jStart) and (iEnd == jEnd):  # daha genis yakaladiysam
-                    #     new_triple = ((iStart,iEnd), iType)
-                    #     tagged[i] = new_triple
-                    #     del tagged[j]
-                    #     found_one = True
-                    #     break
 
                     if (iType==jType) and (iStart >= jStart) and (iEnd <= jEnd): # daha dar yakaladiysam
                         del tagged[i]
@@ -200,13 +194,13 @@ def handle_match(catched_keyword, keywords, info, match, tagged , line_number, f
     if newStart < newEnd:
         while line[newStart] == " ":
             newStart += 1
-        # print("elmca1",line[newEnd-1])
+
         while line[newEnd-1] == " ":
             newEnd -= 1
         new_span = (newStart,newEnd)
-        # print(line[newStart:newEnd], catched, len(catched))
+
         for each in keywords: # ex. (prof. dr.) catched before but now we catch (prof).
-            if catched in each: ###########################eger parametreye 2 listeyi de verirsen, hem bastan hem sondan yakaladiginda patliyiiir
+            if catched in each:
                 flag = True
                 break
             if info == "PERSON\t":
@@ -228,7 +222,6 @@ def handle_match(catched_keyword, keywords, info, match, tagged , line_number, f
 
             # print(newStart,newEnd,tagStart,tagEnd)
 
-            # if (newStart <= tagStart) and (newEnd >= tagEnd) and info[:-1] == tagged[i][1]:  # daha genis yakaladiysam
             if (newStart <= tagStart) and (newEnd >= tagEnd):  # daha genis yakaladiysam tagten bagimsiz
                 new_triple = (new_span, info[:-1])
                 # print(match.re)
@@ -239,10 +232,8 @@ def handle_match(catched_keyword, keywords, info, match, tagged , line_number, f
                 flag = True
                 break
 
-            # if (newStart >= tagStart) and (newEnd <= tagEnd) and info[:-1] == tagged[i][1]: # daha dar yakaladiysam
             if (newStart >= tagStart) and (newEnd <= tagEnd): # daha dar yakaladiysam
                 flag = True
-                # print(line[newStart:newEnd],"yakalamistim ama bu var diye saldim", line[tagStart:tagEnd])
                 break
 
             if(newEnd == tagStart and info[:-1] == tagged[i][1] ): # bastan ekliceksem
@@ -346,11 +337,6 @@ for line in testdata:
         for match in matched:
             tagged = handle_match(afterDate, after_keywords_date, "TIME\t" ,match, tagged, line_number, flag, line)
 
-        # search_regex = r"(\d{1,4})?(?=([']\w*)? "+afterDate+r"\w*)" # BURASI COKOMELLI
-        # matched = re.finditer(search_regex, line)
-        # for match in matched:
-        #     tagged = handle_match(afterDate, after_keywords_date, "TIME\t" ,match, tagged, line_number, flag, line)
-
     for preTime in pre_keywords_time:
         search_regex =  r"(" + preTime + r" )(([0-2][0-3])|[0-9])([:.]([0-5][0-9]))?"
         matched = re.finditer(search_regex, line)
@@ -393,13 +379,6 @@ for line in testdata:
             tagged = handle_match(afterPerson, after_keywords_persons + pre_keywords_persons, "PERSON\t" ,match, tagged, line_number, flag, line)
 
 
-    # lexicon_persons = ["Kaya","Kapagan","Elma Elmaci", "Kaya Kapagan","A.","B.", "A. B."]
-    # lexicon_locations = ["İzmir","İstanbul","ABD"]
-    # lexicon_organizations = ["TUBİTAK", "Tekke", "Zaviyeler", "Tekke ve Zaviyeler"]
-
-    # for tag in tagged:
-    #     print("Before lexicon:", line_number, "\t", tag[1], "\t" , line[tag[0][0]:tag[0][1]], "\t" , tag[0][0],"," ,tag[0][1])
-
 
     tagged = remove_keywords(tagged,line)
 
@@ -426,12 +405,9 @@ for line in testdata:
             for each in lexicon_organizations:
                 # print(each)
                 if aranacak_tag == each:
-                    # print(aranacak_tag)
-                    # print(match.re)
                     tagged = handle_match("", after_keywords_organizations_excluded + after_keywords_organizations_included + pre_keywords_organizations, "ORGANIZATION\t" ,match, tagged, line_number, flag, line)
 
-            # if aranacak_tag in lexicon_organizations:
-            #     tagged = handle_match("", after_keywords_organizations_excluded + after_keywords_organizations_included + pre_keywords_organizations, "ORGANIZATION\t" ,match, tagged, line_number, flag, line)
+
 
     loc_regex = []
     loc_regex.append(consecutive_cap_word)
@@ -481,25 +457,3 @@ for line in testdata:
         print("Line:", line_number, tag[1], line[tag[0][0]:tag[0][1]])
 
 
-
-
-
-
-#hocanin verdikleri
-    # for line in testdata:
-    #     line_number += 1
-    #     # RULE_EXAMPLE 1
-    #     if 'Üniversite' in line:
-    #         print("Line:" ,line_number , "ORGANIZATION", re.findall(r'[A-ZÇĞİÖŞÜ][a-zçğıöşü]* Üniversite\w+', line))
-    #     # RULE_EXAMPLE 2
-    #     if 'yıl' in line:
-    #         print("Line:" ,line_number , "DATE", re.findall(r'\d{4}(?=\s+yıl\w+)', line))
-    #     # RULE_EXAMPLE 3
-    #     if 'Prof. Dr.' in line:
-    #         print("Line:" ,line_number , "PERSON", re.findall(r'(?<=Prof. Dr. )[A-ZÇĞİÖŞÜ][a-zçğıöşü]*\s[A-ZÇĞİÖŞÜ][a-zçğıöşü]*', line))
-    # RULE_EXAMPLE 4
-    # for uppercaseWord in re.finditer(r'[A-ZÇĞİÖŞÜ][a-zçğıöşü]*', line):
-    #     uppercaseWord = line[uppercaseWord.start():uppercaseWord.end()]
-    #     print("######################################",uppercaseWord)
-    #     if uppercaseWord in LOCATIONS:
-    #         print("Line:" ,line_number , "LOCATION", uppercaseWord)
